@@ -1,0 +1,4 @@
+* `oligos_library_1.fasta`: a FASTA of all oligonucleotides in the first pool encoding all saturation mutagenesis variants for the 19 designs from library 1 as well as the unmutated designs. As in Maguire et al., we also included sequences for 338 miniproteins from Rocklin et al. to assess experimental reproducibility. We generated these oligos from protein sequences using the following steps:
+	* For each of the above proteins, we normalized protein lengths by adding `GSS` motifs to the C terminus of each protein until it reached a total length of 50 amino acids.
+	* Next, we converted protein sequences to DNA sequences.
+	* Next, for cloning into plasmids, we added the following 5' and 3' adaptor sequences to the ends of each oligo (5' adaptor: `GGTCGGCTTCGCATATG` and 3' adaptor `CTCGAGGGTGGAGGTTCC`) 
