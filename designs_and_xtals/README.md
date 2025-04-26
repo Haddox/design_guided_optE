@@ -1,2 +1,2 @@
-* `designs/`: design models
-* `xtals/`: crystal structures with a single copy of the design and just the design chain(s) (see the `README.md` file for details) 
+* `unmod/`: pairs of original design models and crystal structures with a single copy of the design and just the design chain(s) (see the `README.md` file for details).
+* `mod/`: pairs of design models and crystal structures modified to have the same set of residues within a given pair. For some pairs, this involved removing a few residues (mostly at the termini) that were present in either one structure or another due to residues not being resolved in the crystal, or the crystal having nondesigned residues at a terminus. 
