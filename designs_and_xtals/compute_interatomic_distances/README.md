@@ -3,5 +3,6 @@
 * `interatomic_distances/`: a directory with interatomic distances computed for a given structure
 	* `*_design_mod.csv` and `*_xtal_mod.csv`: files computed for design models and crystal structures in `../mod/`
 	* `*_design_mod_0001.csv`: files computed for relaxed design models and crystal structures in `../relax_and_scoring_protocols/all_relaxed_pdbs/beta16_cart/`
+	* `*_clean_0001.csv`: files computed for 54 high-resolution crystal structures of native proteins
 	* in the paper, when we compare clashing in design models vs. crystal structures, we use interatomic distances of relaxed designs vs. crystal structures that have not been relaxed.
 * `distance_distribution_plots/`: plots showing distance distributions for C:C and C:OCbb for each design and crystal pair.
