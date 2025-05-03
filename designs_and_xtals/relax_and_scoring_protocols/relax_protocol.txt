@@ -1,0 +1,14 @@
+Rosetta/main/source/bin/relax.default.linuxgccrelease \
+	-s {path_to_input_pdb} \
+	-use_input_sc \
+	-relax:min_type lbfgs_armijo_nonmonotone \
+	-relax:cartesian \
+	-relax:script MonomerDesign2019 \
+	-nstruct 10 \
+	-ex1 -ex2aro \
+	-linmem_ig 10 \
+	-in:file:native {path_to_reference_pdb_for_rmsd_computation} \
+	-ignore_zero_occupancy false \
+	-crystal_refine \
+	-score:weights {path_to_energy_function_weights_file} \
+	@{path_to_energy_function_flags_file}

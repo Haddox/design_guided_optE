@@ -1,0 +1,8 @@
+Rosetta/main/source/bin/score.default.linuxgccrelease \
+	-l {path_to_file_listing_input_pdbs} \
+	-in:file:native {path_to_reference_pdb_for_rmsd_computation} \
+	-read_only_ATOM_entries \
+	-ignore_zero_occupancy false \
+	-crystal_refine \
+        -score:weights {path_to_energy_function_weights_file} \
+        @{path_to_energy_function_flags_file}
