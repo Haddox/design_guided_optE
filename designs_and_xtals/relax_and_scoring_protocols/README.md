@@ -1,3 +1,4 @@
 * `relax_protocol.txt`: protocol for relaxing structures using a given energy function.
 * `scoring_protocol.txt`: protocol for computing Rosetta energies of structures using a given energy function. 
 * `make_poly_gly.py`: code for using PyRosetta to convert a structure to a poly-glycine sequence while keeping the backbone atoms fixed in place.
+* `all_relaxed_pdbs/`: PDBs of all structures relaxed with each energy function. The subdirectory called `beta16_cart/` contains structures relaxed with beta_nov16, while the subdirectory called `beta16_cart_plus_hpsc_lj_changes/` contains structures relaxed with beta_jan25. For each input structure (from the `../mod/` directory), the relax protocol generated between 5-10 replicate output structures from independent relax runs. The above subdirectories also contain poly-glycine versions of each relaxed structure. 

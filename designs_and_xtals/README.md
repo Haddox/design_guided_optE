@@ -1,3 +1,3 @@
 * `unmod/`: pairs of original design models and crystal structures with a single copy of the design and just the design chain(s) (see the `README.md` file for details).
 * `mod/`: pairs of design models and crystal structures modified to have the exact same sequence. See the `README.md` file in the subdirectory for more details. 
-* `relax_and_scoring_protocols/`: protocols for using Rosetta to relax and score structures with a given energy function.
+* `relax_and_scoring_protocols/`: protocols for using Rosetta to relax and score structures with a given energy function. This directory also contains all output PDBs from relaxing the modified structures from above.
