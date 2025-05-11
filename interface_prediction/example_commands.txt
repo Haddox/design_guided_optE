@@ -1,0 +1,56 @@
+# Example command to jitter on chain at a protein-protein interface relative to another, creating 25 random jittered structures and saving each to a PDB:
+python jitter_binder.py {file with a newline-delimited list of paths to input PDBs} \
+	-output_dir {output directory} \
+	-output_pdb_prefix {prefix used in the output file names of jittered PDBs} \
+	-internal_samples 25 \
+	-cluster_rmsd 0.2 \
+	-max_translate 2 \
+	-max_angle 10
+
+# Example command to score jittered structures using the "beta_soft" energy function
+Rosetta/main/source/bin/score.linuxgccrelease -s {path to input pdb} -score:weights beta_soft -beta
+
+# Input arguments for using Rosetta@Home to perform a FastRelax protocol of all residues of an input structure using beta_nov16. 
+-run::protocol relax
+-score:weights beta_nov16_cart
+-crystal_refine
+-use_input_sc
+-ignore_unrecognized_res
+-overwrite
+-relax:script MonomerDesign2019
+-relax:cartesian true
+-relax:min_type lbfgs_armijo_nonmonotone
+-relax:constrain_relax_to_start_coords
+-relax:ramp_constraints false
+-set_weights coordinate_constraint 0.01
+-relax:default_repeats 5
+-ex1
+-ex2aro
+-linmem_ig 10
+-mute all
+-beta_nov16_cart
+-silent_gz
+-out:file:silent_struct_type binary
+-out:file:silent default.out
+
+# Input arguments for using Rosetta@Home to perform a FastRelax protocol of only interface residues of an input structure and then compute the RMSD to a given reference. See the `README.md` file in this directory for the RosettaScripts XML files giving the relax protocols used. There is one XML each for: relaxing both protein chains from the interface, relaxing only chain A (after deleting chain B) or relaxing only chain B (after deleting chain A).
+-run:protocol jd2_scripting
+-in::file::boinc_wu_zip {a zipped directory with all input files}
+-database database
+-nstruct 2
+-parser:protocol {RosettaScripts XML giving the relax protocol}
+-parser:script_vars wts={Rosetta energy function weights file} relaxscript=MonomerDesign2019
+-in:file:silent {os.path.basename(single_pose_input_silent_file)}',
+-in:file:silent_struct_type binary
+-score:weights {Rosetta energy function weights file}
+-crystal_refine true
+-overwrite
+-in:file:native {PDB file of reference structure used for RMS computation}
+-out:file:renumber_pdb true
+-silent_read_through_errors
+-silent_gz
+-out:file:silent_struct_type binary
+-out:file:silent default.out
+-out:file:scorefile default.sc
+-mute all
+@{Rosetta energy function flags file}
