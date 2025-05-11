@@ -1,7 +1,7 @@
 This directory contains input files and code for performing the atom-pair distance-distribution benchmark used to train and evaluate the energy function.
 * `pdbs_for_training`: 78 high-resolution crystal structures used for training
 * `pdbs_for_validation`: 54 high-resolution crystal structures used for validation
-* `example_commands_to_run_test.txt`: example commands for computing atom-pair distance distributions from a set of PDBs of high-resolution crystal structures before and after relaxing them. This file also gives an example command for relaxing the structures.
+* `example_commands_to_run_test.txt`: example commands for computing atom-pair distance distributions from a set of PDBs of high-resolution crystal structures before and after relaxing them. This file also gives an example command for relaxing the structures. See `../weights_and_flags_files/` for weights and flags files for each energy function. We used these files in the relax command.
 * `distdstr_0.3.py`: Python script for computing atom-pair distance distributions given a set of input PDBs
 * `data/`: contains files that encode the atom-typing scheme used to compute distance distributions. The above Python script uses these files.
 	* The new atom-typing scheme classifies carbons from sidechains in the following ways:
