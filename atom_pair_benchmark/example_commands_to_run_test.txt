@@ -1,0 +1,21 @@
+# Example command to compute distance distributions for input crystal structures before relaxing them
+python distdstr_0.3.py {space-delimited list of input pdb files} --output_dir {output directory} --gen --ref {output file name} --use_new_atom_typing
+
+# Example command to relax crystal structures
+Rosetta/main/source/bin/relax.default.linuxgccrelease \
+	@{Rosetta energy function flags file} \
+	-s {input pdb} \
+	-score:weights {Rosetta energy function weights file} \
+	-crystal_refine \
+	-nstruct 1 \
+	-no_optH false -ignore_unrecognized_res -overwrite \
+	-relax:script MonomerDesign2019 \
+	-relax:cartesian true \
+	-relax:min_type lbfgs_armijo_nonmonotone \
+	-multi_cool_annealer 10 \
+	-ex1 -ex2aro -linmem_ig 10 \
+	-out:prefix {output directory}
+
+
+# Example command to compute distance distributions for crystal structures after relaxing them
+python distdstr_0.3.py {space-delimited list of relaxed input pdb files}  --ref {path to output file from the first command from above run on unrelaxed pdb files}  --output_dir {output directory} --plot --verbose --use_new_atom_typing --allow_missing_atom_pairs
