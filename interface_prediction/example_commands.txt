@@ -54,3 +54,18 @@ Rosetta/main/source/bin/score.linuxgccrelease -s {path to input pdb} -score:weig
 -out:file:scorefile default.sc
 -mute all
 @{Rosetta energy function flags file}
+
+# Example command to repack sidechains of interface residues in the dualoptE protocol 
+~/Rosetta/main/source/bin/rosetta_scripts.default.linuxgccrelease \
+	-parser:protocol repack_interface.xml \
+	-parser:script_vars wts={Rosetta energy function weights file} \
+	@{Rosetta energy function flags file} \
+	-in:file:silent {Rosetta silent file with input PDBs}
+	-in:file:silent_struct_type binary \
+	-score:weights {Rosetta energy function weights file} \
+	-crystal_refine true \
+	-in:file:native {reference PDB for RMSD calculation} \
+	-out:file:score_only {output score file} \
+	-parse_script_once_only \
+	-silent_read_through_errors \
+	-mute all
