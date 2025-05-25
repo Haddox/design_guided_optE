@@ -1,0 +1,13 @@
+Rosetta/main/source/bin/relax.default.linuxgccrelease \            
+	-s {input_pdb} \
+	-relax:cartesian \
+	-relax:script MonomerDesign2019 \
+        -nstruct 5 \
+        -relax:constrain_relax_to_start_coords \
+        -relax:ramp_constraints false \
+        -relax:coord_constrain_sidechains \
+        -use_input_sc \
+        -relax:min_type lbfgs_armijo_nonmonotone \
+	-out:file:scorefile {output score file} \
+        -score:weights {energy function weights file} \
+	@{energy function flags file}
