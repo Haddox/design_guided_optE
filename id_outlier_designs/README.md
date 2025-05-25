@@ -1,2 +1,2 @@
-* `rf_model/` contains files with stability scores predicted by the random-forest model.
+* `rf_model/`: contains data used to train the random forest models to predict stability scores of designs from Rocklin et al., as well as files reporting experimental and predicted stability scores, including for the 21 outlier designs analyzed by DMS
 * `Rosetta_energies.csv`: a file with Rosetta energies for designs from Rocklin et al. Each row gives data for a given design. The `name` column gives the design's name and the `total_score` column gives its energy.

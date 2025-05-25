@@ -1,0 +1,51 @@
+# Updated Hugh's groupings with the NTF2 topology
+# Summary of criteria for being in a group (for this iteration of groupings):
+#    - All designs have the same topology
+#    - All designs were made using a similar protocol at the same point in time
+#    - One exception: HHH from the Inna library grouped with HHH from the Eva libraries. Even though they were made at
+#                     different times, Hugh’s understanding is that they are very closely related in terms of how they
+#                     were made.
+#    - Sequence length can vary, though Hugh thought it was a good idea to use length as a criterion in the future.
+# Author: Hamed (Hugh came up with groupings)
+# Index: topologies_per_library.v5.index.csv
+dataset,name,group_index
+Rocklin,HHH,1
+Rocklin,EHEE,2
+Rocklin,EEHEE,3
+Rocklin,HEEH,4
+Longxing,EHEE,5
+longxing_untested,EHEE,5
+Longxing,EEHEE,6
+longxing_untested,EEHEE,6
+Longxing,HEEH,7
+longxing_untested,HEEH,7
+Eva1,HHH,8
+Eva2,HHH,8
+Inna,HHH,8
+Eva1,4h,9
+Eva2,4h,9
+Eva1,thio,10
+Eva2,thio,10
+Eva1,coil,11
+Eva2,coil,11
+Eva1,fold2,12
+Eva2,fold2,12
+Eva1,fold4,13
+Eva2,fold4,13
+Eva1,beta_grasp,14
+Eva2,beta_grasp,14
+Eva1,ferredoxin,15
+Eva2,ferredoxin,15
+topmining_untested,HHH,16
+topmining_untested,4h,17
+topmining_untested,5a0b,18
+topmining_untested,1a2b,19
+topmining_untested,1a3b,20
+topmining_untested,1a4b,21
+topmining_untested,2a2b,22
+topmining_untested,2a3b,23
+topmining_untested,2a4b,24
+topmining_untested,3a1b,25
+topmining_untested,0a6b,26
+topmining_untested,0a7b,27
+181114_Benjamin_NTF2,NTF2,28
