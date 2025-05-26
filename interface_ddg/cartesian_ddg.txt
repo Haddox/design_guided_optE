@@ -1,0 +1,15 @@
+Rosetta/main/source/bin/cartesian_ddg.default.linuxgccrelease \
+	-database Rosetta/main/database/ \
+        -s {input_pdb} \
+        -ddg:mut_file {input_mut_file} \
+	-ddg::interface_ddg {jump number for interface} \
+        -ddg:iterations 3 \
+        -ddg::cartesian \
+	-ddg::dump_pdbs True \
+        -ddg:bbnbrs 1 \
+        -ddg::legacy false \
+	-out:file:scorefile {output_score_file} \
+	-crystal_refine \
+        -read_only_ATOM_entries \
+	-score:weights {energy function weights file} \
+	@{energy function flags file}

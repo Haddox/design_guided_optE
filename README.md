@@ -6,3 +6,4 @@
 * `atom_pair_benchmark/`: files related to the atom-pair distance-distribution benchmark
 * `interface_prediction/`: files related to the interface-prediction benchmark
 * `monomer_ddg/`: files related to the monomer ddG benchmark
+* `interface_ddg/`: files related to the interface ddG benchmark
