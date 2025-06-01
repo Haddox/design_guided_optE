@@ -9,7 +9,6 @@ Rosetta/main/source/bin/cartesian_ddg.default.linuxgccrelease \
         -ddg:bbnbrs 1 \
         -ddg::legacy false \
 	-out:file:scorefile {output_score_file} \
-	-crystal_refine \
         -read_only_ATOM_entries \
 	-score:weights {energy function weights file} \
 	@{energy function flags file}
