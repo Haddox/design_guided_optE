@@ -1,0 +1,63 @@
+<ROSETTASCRIPTS>
+
+    <SCOREFXNS>
+        <ScoreFunction name="sfxn" weights="%%wts%%" />
+        <ScoreFunction name="sfxn_cst" weights="%%wts%%" >
+            <Reweight scoretype="coordinate_constraint" weight="0.01"/>
+        </ScoreFunction>
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        # Make residue selectors that identify which residues are at the
+        # interface, and which are not
+        <Chain name="chainA" chains="A"/>
+        <Chain name="chainB" chains="B"/>
+        <Neighborhood name="interface_chA" selector="chainB" distance="12.0" />
+        <Neighborhood name="interface_chB" selector="chainA" distance="12.0" />
+        <Or name="AB" selectors="chainA,chainB" />
+        <And name="AB_interface" selectors="interface_chA,interface_chB" />
+        <Not name="Not_interface" selector="AB_interface" />
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+        # For preventing repacking of residues not at the interface
+        <OperateOnResidueSubset name="restrict_to_interface" selector="Not_interface">
+            <PreventRepackingRLT/>
+        </OperateOnResidueSubset>
+
+        # Add extra rotamers and get flags from the command line
+        <ExtraRotamersGeneric name="ex1_ex2aro" ex1="1"  ex2aro="1" />
+        <InitializeFromCommandline name="init" />
+    </TASKOPERATIONS>
+
+    <SIMPLE_METRICS>
+        <RMSDMetric name="rms" rmsd_type="rmsd_protein_bb_ca" super="1" use_native="1"/>
+    </SIMPLE_METRICS>
+
+    <MOVERS>
+        # Measure RMSD
+        <RunSimpleMetrics name="run_rmsd" metrics="rms" />
+
+        # Apply coordinate constraints to all backbone heavy atoms
+        <AddConstraints name="add_bb_coord_cst" >
+            <CoordinateConstraintGenerator name="bb_coord_cst" sidechain="false"/>
+        </AddConstraints>
+
+        # Relax the complex in Cartesian space, only relaxing bb/sc atoms near the interface
+        <FastRelax name="fastrelax" task_operations="restrict_to_interface,ex1_ex2aro,init"
+            scorefxn="sfxn_cst" cartesian="true" relaxscript="%%relaxscript%%">
+            <MoveMap name="MM" >
+                <ResidueSelector selector="Not_interface" chi="false" bb="false" />
+            </MoveMap>
+        </FastRelax>
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add mover="add_bb_coord_cst" />
+        <Add mover="fastrelax" />
+        <Add mover_name="run_rmsd" />
+    </PROTOCOLS>
+    
+    <OUTPUT scorefxn="sfxn" />
+
+</ROSETTASCRIPTS>

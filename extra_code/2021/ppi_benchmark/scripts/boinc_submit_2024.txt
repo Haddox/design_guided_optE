@@ -1,0 +1,10 @@
+application = rosetta
+
+name = %%name%%
+description = %%description%%
+inputfiles = %%inputfiles%%
+arguments = %%arguments%%
+resultfiles = %%resultfiles%% 
+queue = 1
+
+

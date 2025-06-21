@@ -1,0 +1,13 @@
+-overwrite
+-preserve_crystinfo
+
+#-extra_res_fa LG.params
+#-score:elec_group_extrafile extra_group_def.dat
+
+-score:grpelec_fade_type grpsubtract
+-score:elec_die 6.0
+-score:fa_max_dis 6.0
+-score:elec_min_dis 0.5
+-score:elec_max_dis 6.0
+-score:elec_r_option true
+

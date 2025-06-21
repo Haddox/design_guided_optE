@@ -1,0 +1,17 @@
+<ROSETTASCRIPTS>
+    
+    <SCOREFXNS>
+        <ScoreFunction name="sfxn" weights="%%weights_file%%" >
+            <Reweight scoretype="sap_constraint" weight="1.0" />
+        </ScoreFunction>
+    </SCOREFXNS>
+    
+    <SIMPLE_METRICS>
+        <SapScoreMetric name="sap_score" />
+    </SIMPLE_METRICS>
+
+    <PROTOCOLS>
+        <Add metrics="sap_score" />
+    </PROTOCOLS>
+
+</ROSETTASCRIPTS>

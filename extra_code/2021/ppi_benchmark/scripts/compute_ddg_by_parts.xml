@@ -1,0 +1,43 @@
+<ROSETTASCRIPTS>
+    <SCOREFXNS>
+        <ScoreFunction name="sfxn" weights="%%wts%%" />
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        <Chain name="chainA" chains="A" />
+        <Chain name="chainB" chains="B" />
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+    </TASKOPERATIONS>
+    
+    <MOVERS>
+        <DeleteRegionMover name="delete_chain_A" residue_selector="chainA" />
+        <DeleteRegionMover name="delete_chain_B" residue_selector="chainB" />
+    </MOVERS>
+    
+    <FILTERS>
+        <ScoreType name="total_score" scorefxn="sfxn" score_type="total_score" threshold="0" confidence="0" />
+        <MoveBeforeFilter name="total_score_chain_A" mover="delete_chain_B" filter="total_score" confidence="0" />
+        <MoveBeforeFilter name="total_score_chain_B" mover="delete_chain_A" filter="total_score" confidence="0" />
+	<CalculatorFilter name="ddg" equation="ts - tsA - tsB">
+                <Var name="ts" filter="total_score" />
+                <Var name="tsA" filter="total_score_chain_A" />
+                <Var name="tsB" filter="total_score_chain_B" />
+        </CalculatorFilter>
+    </FILTERS>
+
+    <MOVERS>
+        <ddG name="ddg" scorefxn="sfxn" chain_num="2" repack_bound="0" repack_unbound="0" translate_by="100" relax_unbound="0" relax_bound="0"/>
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add filter_name="total_score_chain_A" />
+        <Add filter_name="total_score_chain_B" />
+        <Add filter_name="total_score" />
+	<Add filter_name="ddg" />
+    </PROTOCOLS>
+
+    <OUTPUT scorefxn="sfxn" />
+
+</ROSETTASCRIPTS>

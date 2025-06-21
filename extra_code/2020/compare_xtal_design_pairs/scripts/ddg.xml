@@ -1,0 +1,19 @@
+<ROSETTASCRIPTS>
+	<SCOREFXNS>
+		<ScoreFunction name="myscore" weights="%%weights_file%%"/>
+	</SCOREFXNS>
+
+	<TASKOPERATIONS>
+	</TASKOPERATIONS>
+
+	<FILTERS>
+	</FILTERS>
+
+	<MOVERS>
+		<ddG name="ddG" scorefxn="myscore" chain_num="2" repack_bound="0" repack_unbound="0" translate_by="100" relax_unbound="0" relax_bound="0"/>
+	</MOVERS>
+
+	<PROTOCOLS>
+		<Add mover_name="ddG"/>
+	</PROTOCOLS>
+</ROSETTASCRIPTS>

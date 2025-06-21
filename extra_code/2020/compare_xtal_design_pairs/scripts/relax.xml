@@ -1,0 +1,23 @@
+<ROSETTASCRIPTS>
+
+<SCOREFXNS>
+		<ScoreFunction name="sfxn_std"  weights="%%weights_file%%" />
+</SCOREFXNS>
+
+<TASKOPERATIONS>
+</TASKOPERATIONS>
+
+<FILTERS>
+		<ScoreType name="total_score" scorefxn="sfxn_std" confidence="0" threshold="999"/>
+</FILTERS>
+
+<MOVERS>
+	    <FastRelax name="fastrelax" scorefxn="sfxn_std" cartesian="true" repeats="1" />
+</MOVERS>
+
+<PROTOCOLS>
+		<Add mover_name="fastrelax"/>
+		<Add filter_name="total_score" />
+</PROTOCOLS>
+
+</ROSETTASCRIPTS>

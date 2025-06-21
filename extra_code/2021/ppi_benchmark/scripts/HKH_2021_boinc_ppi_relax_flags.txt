@@ -1,0 +1,21 @@
+-run::protocol relax
+-score:weights beta_nov16_cart
+-crystal_refine
+-use_input_sc
+-ignore_unrecognized_res
+-overwrite
+-relax:script MonomerDesign2019
+-relax:cartesian true
+-relax:min_type lbfgs_armijo_nonmonotone
+-relax:constrain_relax_to_start_coords
+-relax:ramp_constraints false
+-set_weights coordinate_constraint 0.01
+-relax:default_repeats 5
+-ex1
+-ex2aro
+-linmem_ig 10
+-mute all
+-beta_nov16_cart
+-silent_gz
+-out:file:silent_struct_type binary
+-out:file:silent default.out

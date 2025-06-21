@@ -1,0 +1,53 @@
+<ROSETTASCRIPTS>
+
+    <SCOREFXNS>
+        <ScoreFunction name="sfxn" weights="%%wts%%" />
+        <ScoreFunction name="sfxn_cst" weights="%%wts%%" >
+            <Reweight scoretype="coordinate_constraint" weight="0.01"/>
+        </ScoreFunction>
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        # Make residue selectors that identify which residues are at the
+        # interface, and which are not
+        <Chain name="chainA" chains="A"/>
+        <Chain name="chainB" chains="B"/>
+        <Neighborhood name="interface_chA" selector="chainB" distance="12.0" />
+        <Neighborhood name="interface_chB" selector="chainA" distance="12.0" />
+        <Or name="AB" selectors="chainA,chainB" />
+        <And name="AB_interface" selectors="interface_chA,interface_chB" />
+        <Not name="Not_interface" selector="AB_interface" />
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+        # For preventing repacking of residues not at the interface
+        <OperateOnResidueSubset name="restrict_to_interface" selector="Not_interface">
+            <PreventRepackingRLT/>
+        </OperateOnResidueSubset>
+
+        # Add extra rotamers and get flags from the command line
+        <ExtraRotamersGeneric name="ex1_ex2aro" ex1="1"  ex2aro="1" />
+        <InitializeFromCommandline name="init" />
+    </TASKOPERATIONS>
+
+    <SIMPLE_METRICS>
+        <RMSDMetric name="rms" rmsd_type="rmsd_protein_bb_ca" super="1" use_native="1"/>
+    </SIMPLE_METRICS>
+
+    <MOVERS>
+        # Measure RMSD
+        <RunSimpleMetrics name="run_rmsd" metrics="rms" />
+
+        # Compute ddg, relaxing the unbound structure
+        <ddG name="ddg" scorefxn="sfxn" chain_num="2" repack_bound="1" relax_bound="0"
+            repack_unbound="1" relax_unbound="0" translate_by="1000" />
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add mover_name="run_rmsd" />
+        <Add mover="ddg" />
+    </PROTOCOLS>
+    
+    <OUTPUT scorefxn="sfxn" />
+
+</ROSETTASCRIPTS>

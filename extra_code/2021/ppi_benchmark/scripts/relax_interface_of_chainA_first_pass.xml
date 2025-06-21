@@ -1,0 +1,72 @@
+<ROSETTASCRIPTS>
+
+    <SCOREFXNS>
+        <ScoreFunction name="sfxn" weights="%%wts%%" />
+        <ScoreFunction name="sfxn_cst" weights="%%wts%%" >
+            <Reweight scoretype="coordinate_constraint" weight="0.01"/>
+        </ScoreFunction>
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        # Make residue selectors that identify which residues are at the
+        # interface, and which are not
+        <Chain name="chainA" chains="A"/>
+        <Chain name="chainB" chains="B"/>
+        <Neighborhood name="interface_chA" selector="chainB" distance="12.0" />
+        <Neighborhood name="interface_chB" selector="chainA" distance="12.0" />
+        <Or name="AB" selectors="chainA,chainB" />
+        <And name="AB_interface" selectors="interface_chA,interface_chB" />
+        <Not name="Not_interface" selector="AB_interface" />
+        <ResiduePDBInfoHasLabel name="non_interface_res_selector" property="non_interface_residue" />
+        <InterfaceByVector name="interface_by_vector" cb_dist_cut="10.0" nearby_atom_cut="5.5"
+            vector_angle_cut="75.0" vector_dist_cut="9.0"
+            grp1_selector="chainA" grp2_selector="chainB"/>
+        <Not name="not_interface_by_vector" selector="interface_by_vector" />
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+        # For preventing repacking of residues not at the interface
+        <OperateOnResidueSubset name="restrict_to_interface" selector="non_interface_res_selector">
+            <PreventRepackingRLT/>
+        </OperateOnResidueSubset>
+
+        # Add extra rotamers and get flags from the command line
+        <ExtraRotamersGeneric name="ex1_ex2aro" ex1="1"  ex2aro="1" />
+        <InitializeFromCommandline name="init" />
+    </TASKOPERATIONS>
+
+    <MOVERS>
+        # Mover for adding a label to non-interface residues
+        <AddResidueLabel name="label_non_interface_res" residue_selector="Not_interface"
+            label="non_interface_residue" />
+        <AddResidueLabel name="label_non_interface_by_vector_res" residue_selector="not_interface_by_vector"
+            label="non_interface_by_vector_residue" />
+
+        # Mover for deleting one of the chains
+        <DeleteRegionMover name="delete_chain_B" residue_selector="chainB" />
+
+        # Apply coordinate constraints to all backbone heavy atoms
+        <AddConstraints name="add_bb_coord_cst" >
+            <CoordinateConstraintGenerator name="bb_coord_cst" sidechain="false"/>
+        </AddConstraints>
+
+        # Relax the complex in Cartesian space, only relaxing bb/sc atoms near the interface
+        <FastRelax name="fastrelax" task_operations="restrict_to_interface,ex1_ex2aro,init"
+            scorefxn="sfxn_cst" cartesian="true" relaxscript="%%relaxscript%%" repeats="1">
+            <MoveMap name="MM" >
+                <ResidueSelector selector="non_interface_res_selector" chi="false" bb="false" />
+            </MoveMap>
+        </FastRelax>
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add mover="label_non_interface_res" />
+        <Add mover="label_non_interface_by_vector_res" />
+        <Add mover="delete_chain_B" />
+        <Add mover="add_bb_coord_cst" />
+        <Add mover="fastrelax" />
+    </PROTOCOLS>
+    
+    <OUTPUT scorefxn="sfxn" />
+
+</ROSETTASCRIPTS>

@@ -1,0 +1,48 @@
+<ROSETTASCRIPTS>
+
+    <SCOREFXNS>
+        <ScoreFunction name="sfxn" weights="%%wts%%" />
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+	# Get a list of non-interface residues from PDB-Info labels
+        <ResiduePDBInfoHasLabel name="non_interface_res_selector" property="non_interface_by_vector_residue" />
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+        # For preventing repacking of residues not at the interface
+        <OperateOnResidueSubset name="restrict_to_interface" selector="non_interface_res_selector">
+            <PreventRepackingRLT/>
+        </OperateOnResidueSubset>
+	
+	# For preventing redesign of residues at the interface
+	<RestrictToRepacking name="no_design"/>
+
+        # Add extra rotamers and get flags from the command line
+        ExtraRotamersGeneric name="ex1_ex2aro" ex1="1"  ex2aro="1" />
+        <InitializeFromCommandline name="init" />
+
+	# Include current rotamers
+	<IncludeCurrent name="ic"/>
+    </TASKOPERATIONS>
+    
+    <SIMPLE_METRICS>
+        <RMSDMetric name="rms" rmsd_type="rmsd_protein_bb_ca" super="1" use_native="1"/>
+    </SIMPLE_METRICS>
+
+    <MOVERS>
+        # Relax the complex in Cartesian space, only relaxing bb/sc atoms near the interface
+	<PackRotamersMover name="pack" scorefxn="sfxn" task_operations="no_design,restrict_to_interface,ic,init" />
+	
+	# Measure RMSD
+        <RunSimpleMetrics name="run_rmsd" metrics="rms" />
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add mover="pack" />
+	<Add mover_name="run_rmsd" />
+    </PROTOCOLS>
+    
+    <OUTPUT scorefxn="sfxn" />
+
+</ROSETTASCRIPTS>

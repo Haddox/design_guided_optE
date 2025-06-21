@@ -1,0 +1,65 @@
+<ROSETTASCRIPTS>
+	<SCOREFXNS>
+        <ScoreFunction name="sfxn" weights="%%weights_file%%" />
+    </SCOREFXNS>
+
+
+	<RESIDUE_SELECTORS>
+        # selections related to the protein DNA interface 
+		<ResiduePropertySelector name="protein" properties="PROTEIN" />
+        <Not name="not_protein" selector="protein" />
+	</RESIDUE_SELECTORS>
+
+	<TASKOPERATIONS>
+        <InitializeFromCommandline name="IFC" />
+        <ExtraRotamersGeneric name="ex_rot" ex1="1" ex2="0" />
+        <LimitAromaChi2 name="limitchi2" chi2max="110" chi2min="70" include_trp="True" />
+        <OperateOnResidueSubset name="not_protein_ta" selector="not_protein">
+            <PreventRepackingRLT/>
+        </OperateOnResidueSubset>
+	</TASKOPERATIONS>
+
+    <SIMPLE_METRICS>
+        # want an alternate way to calculate sequence recovery since the SequenceRecovery filter previously gave strange results
+        <SequenceRecoveryMetric name="seq_recovery_SM" use_native="1" residue_selector="protein" />
+
+        # reports the sequence of the residues available for design
+        <SequenceMetric name="design_sequence" output_mode="oneletter" residue_selector="protein" />
+    </SIMPLE_METRICS>
+
+
+    <MOVERS>
+        # Adds label to all residues within 10A of DNA
+        <AddResidueLabel name="label_interface_res" residue_selector="protein" label="design_res" /> 
+
+        <RunSimpleMetrics name="predes_metrics" metrics="design_sequence" prefix="pre_" />
+        <RunSimpleMetrics name="postdes_metrics" metrics="seq_recovery_SM,design_sequence" prefix="post_" />
+
+        <MutateResidue name="ALA_mut" new_res="ALA" update_polymer_bond_dependent="0" residue_selector="protein" />
+
+        <PackRotamersMover name="FixbbDesign" 
+            scorefxn="sfxn" 
+            task_operations="IFC">
+        </PackRotamersMover>
+    </MOVERS>
+
+
+	<FILTERS>
+		<Time name="timed"/>
+        <SequenceRecovery name="seq_recovery" rate_threshold="0" mutation_threshold="100" task_operations="not_protein_ta" report_mutations="0" scorefxn="sfxn" verbose="1" confidence="0" />
+        <DesignableResidues name="designable_residues" task_operations="not_protein_ta" designable="1" packable="0" confidence="0"/>
+	</FILTERS>
+
+	<PROTOCOLS>
+		<Add filter="timed" />
+        <Add mover="label_interface_res" />     # label the protein residues as the interface
+        <Add mover="predes_metrics" />          # report sequence of native residues before design
+        Add mover="ALA_mut" />                 # mutate all designed residues to alanine
+        <Add mover="FixbbDesign" />             # FastDesign the interface residues
+        <Add mover="postdes_metrics" />         # report sequence of native residue positions post-design, calculate sequence recovery using simple metrics
+        <Add filter="designable_residues" />    # count number of residues available for design
+        <Add filter="seq_recovery" />           # calculate sequence recovery
+        <Add filter="timed" />
+	</PROTOCOLS>
+
+</ROSETTASCRIPTS>

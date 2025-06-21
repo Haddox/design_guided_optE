@@ -1,0 +1,75 @@
+<ROSETTASCRIPTS>
+    
+    <SCOREFXNS>
+	<ScoreFunction name="sfxn" weights="%%weights_file%%" />
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+    	# Selects surface residues using number of side-chain neighbors
+    	<Layer name="surface" select_surface="true" core_cutoff="3.7" surface_cutoff="1.3"/>
+	<Layer name="boundary" select_boundary="true" core_cutoff="3.7" surface_cutoff="1.3"/>
+	<Layer name="core" select_core="true" core_cutoff="3.7"/>
+
+        # Make residue selectors that identify which residues are at the
+        # interface, and which are not
+        <Chain name="chainA" chains="A"/>
+        <Chain name="chainB" chains="B"/>
+        <Neighborhood name="interface_chA" selector="chainB" distance="12.0" />
+        <Neighborhood name="interface_chB" selector="chainA" distance="12.0" />
+        <Or name="AB" selectors="chainA,chainB" />
+        <And name="AB_interface" selectors="interface_chA,interface_chB" />
+        <Not name="Not_interface" selector="AB_interface" />
+        <ResiduePDBInfoHasLabel name="non_interface_res_selector" property="non_interface_residue" />
+        <InterfaceByVector name="interface_by_vector" cb_dist_cut="10.0" nearby_atom_cut="5.5"
+            vector_angle_cut="75.0" vector_dist_cut="9.0"
+            grp1_selector="chainA" grp2_selector="chainB"/>
+        <Not name="not_interface_by_vector" selector="interface_by_vector" />
+    </RESIDUE_SELECTORS>
+    
+    <FILTERS>
+	<ScoreType name="total_score" scorefxn="sfxn" confidence="0" threshold="999"/>
+	<BuriedUnsatHbonds name="buns_heavy_ball_1.1D" use_reporter_behavior="true" report_all_heavy_atom_unsats="true" scorefxn="sfxn" residue_selector="AB_interface" ignore_surface_res="false" print_out_info_to_pdb="true" confidence="0" use_ddG_style="true" burial_cutoff="0.01" dalphaball_sasa="true" probe_radius="1.1" max_hbond_energy="1.5" burial_cutoff_apo="0.2" />
+        <BuriedUnsatHbonds name="buns_heavy_ball_1.1D_v2" use_reporter_behavior="true" report_all_heavy_atom_unsats="true" scorefxn="sfxn" residue_selector="AB_interface" ignore_surface_res="false" print_out_info_to_pdb="true" confidence="0" use_ddG_style="true" burial_cutoff="0.01" dalphaball_sasa="true" probe_radius="1.1" max_hbond_energy="1.5" burial_cutoff_apo="0.01" />
+        <BuriedUnsatHbonds name="buns_heavy_ball_1.1D_v3" use_reporter_behavior="true" report_all_heavy_atom_unsats="true" scorefxn="sfxn" residue_selector="AB_interface" ignore_surface_res="false" print_out_info_to_pdb="true" confidence="0" use_ddG_style="true" burial_cutoff="0.01" dalphaball_sasa="true" probe_radius="1.1" burial_cutoff_apo="0.01" />
+    	<BuriedUnsatHbonds name="buns_bb_heavy" report_bb_heavy_atom_unsats="true" ignore_surface_res="true" residue_surface_cutoff="20.0" ignore_bb_heavy_unsats="false" confidence="0"/>
+	<BuriedUnsatHbonds name="buns_sc_heavy" report_sc_heavy_atom_unsats="true" ignore_surface_res="true" residue_surface_cutoff="20.0" ignore_bb_heavy_unsats="false" confidence="0"/>
+	<BuriedUnsatHbonds name="buns_nonheavy" report_nonheavy_unsats="true" ignore_surface_res="true" residue_surface_cutoff="20.0" confidence="0"/>
+	<ResidueCount name="percent_hydrophobic_surface" include_property="HYDROPHOBIC" count_as_percentage="True" min_residue_count="0" max_residue_count="100" residue_selector="surface"/>
+	<ResidueCount name="percent_hydrophobic_boundary" include_property="HYDROPHOBIC" count_as_percentage="True" min_residue_count="0" max_residue_count="100" residue_selector="boundary"/>
+	<ResidueCount name="percent_hydrophobic_core" include_property="HYDROPHOBIC" count_as_percentage="True" min_residue_count="0" max_residue_count="100" residue_selector="core"/>
+	<ResidueCount name="nres" confidence="0" />
+	<ResidueCount name="nres_AB_interface" confidence="0" residue_selector="AB_interface"/>
+	<ResidueCount name="nres_interface_by_vector" confidence="0" residue_selector="interface_by_vector"/>
+	# For computing the buried surface area of hydrophobic atoms for hydrophobic
+	# residues only
+	<BuriedSurfaceArea name="buried_npsa_FAMILYVW" select_only_FAMILYVW="True" atom_mode="hydrophobic_atoms" confidence="0.0" />
+	# For computing the buried surface area of polar atoms over all residues
+	<BuriedSurfaceArea name="buried_psa" select_only_FAMILYVW="False" atom_mode="polar_atoms" confidence="0.0" />
+    </FILTERS>
+
+    <SIMPLE_METRICS>
+        <SapScoreMetric name="sap_score" />
+    </SIMPLE_METRICS>
+
+    <PROTOCOLS>
+	Add filter_name="total_score" />
+        <Add filter_name="buns_heavy_ball_1.1D" />
+        <Add filter_name="buns_heavy_ball_1.1D_v2" />
+        <Add filter_name="buns_heavy_ball_1.1D_v3" />
+	<Add filter_name="buns_bb_heavy" />
+	<Add filter_name="buns_sc_heavy" />
+	<Add filter_name="buns_nonheavy" />
+	Add filter_name="percent_hydrophobic_surface"/>
+	Add filter_name="percent_hydrophobic_boundary"/>
+	Add filter_name="percent_hydrophobic_core"/>
+	<Add filter_name="nres"/>
+	<Add filter_name="nres_AB_interface"/>
+	<Add filter_name="nres_interface_by_vector"/>
+	Add filter_name="buried_npsa_FAMILYVW"/>
+	Add filter_name="buried_psa"/>
+        Add metrics="sap_score" />
+    </PROTOCOLS>
+
+    <OUTPUT scorefxn="sfxn"/>
+
+</ROSETTASCRIPTS>

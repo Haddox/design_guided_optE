@@ -1,0 +1,12 @@
+<ROSETTASCRIPTS>
+<MOVERS>
+	<MakePolyX name="make_poly_gly" aa="GLY" />
+</MOVERS>
+<RESIDUE_SELECTORS>
+</RESIDUE_SELECTORS>
+<FILTERS>
+</FILTERS>
+<PROTOCOLS>
+	<Add mover_name="make_poly_gly"/>
+</PROTOCOLS>
+</ROSETTASCRIPTS>

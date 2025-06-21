@@ -1,0 +1,22 @@
+<ROSETTASCRIPTS>
+    <TASKOPERATIONS>
+    </TASKOPERATIONS>
+    <SCOREFXNS>
+      <ScoreFunction name="liquidsim" weights="%%weights_file%%" symmetric="1"/>
+    </SCOREFXNS>
+    <FILTERS>
+    </FILTERS>
+    <MOVERS>
+      <PeriodicBoxMover name="prod" report_silent="%%outname%%" report_scorefile="%%scfilename%%"
+			nmol_side="%%nmol%%" vol_step="20" scorefxn="liquidsim"
+			nsteps_equilibrate="500000" nsteps_sim="500000" dump_every="10000" report_every="1000"
+			resize_vol_every="300" temp="%%temperature%%" pressure="1.0"
+			report_thermodynamics="1"
+			initial_density="%%density%%" istart="%%istart%%" correct_LJtruncation="1"/>
+    </MOVERS>
+    <APPLY_TO_POSE>
+    </APPLY_TO_POSE>
+    <PROTOCOLS>
+      <Add mover="prod"/>
+    </PROTOCOLS>
+</ROSETTASCRIPTS>

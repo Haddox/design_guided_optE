@@ -1,0 +1,25 @@
+<ROSETTASCRIPTS>
+
+<SCOREFXNS>
+		<ScoreFunction name="sfxn_std"  weights="%%weights_file%%" />
+</SCOREFXNS>
+
+<TASKOPERATIONS>
+		<RestrictToRepacking name="repackonly" />
+</TASKOPERATIONS>
+
+<FILTERS>
+		# For computing the total score
+		<ScoreType name="total_score" scorefxn="sfxn_std" confidence="0" threshold="999"/>
+</FILTERS>
+
+<MOVERS>
+		<PackRotamersMover name="pack" scorefxn="sfxn_std" /> task_operations="repackonly"/>
+</MOVERS>
+
+<PROTOCOLS>
+		<Add mover_name="pack"/>
+		<Add filter_name="total_score" />
+</PROTOCOLS>
+
+</ROSETTASCRIPTS>

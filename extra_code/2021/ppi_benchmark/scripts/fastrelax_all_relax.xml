@@ -1,0 +1,37 @@
+<ROSETTASCRIPTS>
+
+    <SCOREFXNS>
+        <ScoreFunction name="sfxn" weights="%%weights_file%%" />
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        <Chain name="chainA" chains="A"/>
+        <Chain name="chainB" chains="B"/>
+        <Neighborhood name="interface_chA" selector="chainB" distance="12.0" />
+        <Neighborhood name="interface_chB" selector="chainA" distance="12.0" />
+        <Or name="AB" selectors="chainA,chainB" />
+        <And name="AB_interface" selectors="interface_chA,interface_chB" />
+        <Not name="Not_interface" selector="AB_interface" />
+        <Or name="Not_B_side_of_interface" selectors="chainA,Not_interface"/>
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+        <OperateOnResidueSubset name="restrict_to_interface" selector="Not_interface">
+            <PreventRepackingRLT/>
+        </OperateOnResidueSubset>
+        <ExtraRotamersGeneric name="ex1_ex2aro" ex1="1"  ex2aro="1" />
+        <InitializeFromCommandline name="init" />
+    </TASKOPERATIONS>
+
+    <MOVERS>
+        <FastRelax name="fastrelax" task_operations="ex1_ex2aro,init" scorefxn="sfxn" dualspace="True" repeats="%%n_repeats%%" relaxscript="%%relaxscript%%">
+        </FastRelax>
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add mover="fastrelax" />
+    </PROTOCOLS>
+    
+    <OUTPUT scorefxn="sfxn" />
+
+</ROSETTASCRIPTS>

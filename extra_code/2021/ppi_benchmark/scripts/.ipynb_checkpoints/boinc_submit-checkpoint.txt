@@ -1,0 +1,10 @@
+application = rosetta
+
+name = %%name%%
+description = %%description%%
+inputfiles = HKH_2024_boinc_ppi_relax_flags.txt,%%inputfile%%
+arguments = -s %%inputfile%% @HKH_2021_boinc_ppi_relax_flags.txt
+resultfiles = %%resultfile%% 
+queue = 1
+
+
