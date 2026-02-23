@@ -1,0 +1,92 @@
+import os
+import re
+import pandas as pd
+
+configfile: "config.yaml"
+
+_CSV = "results/rescue_mutations.csv"
+
+
+rule run_analyze_dms:
+    input:
+        lib1=config['dms_lib1'],
+        lib2=config['dms_lib2'],
+    output:
+        _CSV
+    shell:
+        "conda run -n pyrosetta python analyze_dms.py"
+
+
+def _ddg_targets():
+    if not os.path.exists(_CSV):
+        return []
+    df = pd.read_csv(_CSV)
+    df = df[df['size_change'].isin(['large-to-small', 'small-to-large'])]
+    targets = []
+    for _, row in df.iterrows():
+        mut = f"{row['wt_aa']}{int(row['site_n'])}{row['mut_aa']}"
+        for ef in config['energy_functions']:
+            targets.append(
+                f"results/ddg/{ef}/{row['parent_name']}/{mut}/{row['parent_name']}_{mut}.ddg"
+            )
+    return targets
+
+
+DDG_TARGETS = _ddg_targets()
+
+
+ALL_TARGETS = [_CSV] + DDG_TARGETS
+
+
+rule all:
+    input:
+        ALL_TARGETS
+    output:
+        touch("results/ddg/.done")
+
+
+rule make_mut_file:
+    output:
+        "results/ddg/{energy_func}/{design}/{mutation}/{design}_{mutation}.mut"
+    run:
+        m = re.match(r'([A-Z])(\d+)([A-Z])', wildcards.mutation)
+        wt_aa = m.group(1)
+        site_n = m.group(2)
+        mut_aa = m.group(3)
+        with open(output[0], 'w') as f:
+            f.write(f"total 1\n1\n{wt_aa} {site_n} {mut_aa}\n")
+
+
+def get_pdb(wildcards):
+    rd = re.search(r'rd\d+', wildcards.design).group()
+    return f"{config['pdb_dir']}/{rd}/{wildcards.design}.pdb"
+
+
+rule run_cartesian_ddg:
+    input:
+        pdb=get_pdb,
+        mut_file="results/ddg/{energy_func}/{design}/{mutation}/{design}_{mutation}.mut",
+    output:
+        "results/ddg/{energy_func}/{design}/{mutation}/{design}_{mutation}.ddg"
+    params:
+        rosetta_bin=config['rosetta_bin'],
+        rosetta_db=config['rosetta_db'],
+    shell:
+        """
+        rootdir=$PWD
+        outdir=$(dirname {output})
+        mkdir -p $outdir
+        cd $outdir
+        {params.rosetta_bin} \
+            -database {params.rosetta_db} \
+            -s {input.pdb} \
+            -ddg:mut_file $rootdir/{input.mut_file} \
+            -ddg:iterations 5 \
+            -ddg::cartesian \
+            -ddg:bbnbrs 1 \
+            -ddg::legacy false \
+            -out:file:scorefile $(basename {output} .ddg).sc \
+            -crystal_refine \
+            -{wildcards.energy_func} \
+            -score:set_weights cart_bonded 0.5 pro_close 0
+        """

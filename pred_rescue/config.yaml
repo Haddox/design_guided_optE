@@ -1,0 +1,8 @@
+rosetta_bin: /Users/hhaddox/Documents/baker_lab/rosetta/source/bin/cartesian_ddg.default.macosclangrelease
+rosetta_db: /Users/hhaddox/Documents/baker_lab/rosetta/database/
+pdb_dir: /Users/hhaddox/Documents/baker_lab/aan0693_designed-PDB-files
+dms_lib1: /Users/hhaddox/Documents/baker_lab/design_guided_optE/rescue_dms/dms_data/dms_data_library_1.csv
+dms_lib2: /Users/hhaddox/Documents/baker_lab/design_guided_optE/rescue_dms/dms_data/dms_data_library_2.csv
+energy_functions:
+  - beta_nov16
+  - beta_jan25
