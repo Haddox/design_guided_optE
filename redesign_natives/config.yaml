@@ -1,0 +1,10 @@
+rosetta_bin: /Users/hhaddox/Documents/baker_lab/rosetta/source/bin/relax.default.macosclangrelease
+rosetta_scripts_bin: /Users/hhaddox/Documents/baker_lab/rosetta/source/bin/rosetta_scripts.default.macosclangrelease
+rosetta_db: /Users/hhaddox/Documents/baker_lab/rosetta/database/
+pdb_dir: ../atom_pair_benchmark/pdbs_for_validation
+distdstr_script: ../atom_pair_benchmark/distdstr_0.3.py
+design_script: scripts/fast_design_with_surface_and_ss_aa_comp_3.xml
+surface_aa_comp_file: scripts/total_hydrophobicity.comp
+energy_functions:
+  - beta_nov16_cart
+  - beta_jan25_cart
