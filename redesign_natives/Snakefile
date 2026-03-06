@@ -77,10 +77,11 @@ rule design:
         "-read_only_ATOM_entries True "
         "-multi_cool_annealer 10 "
         "-ex1 -ex2aro -linmem_ig 10 "
-        "-parser:script_vars "
         "-{wildcards.ef} "
+        "-parser:script_vars "
         "surface_aa_comp_file={params.surface_aa_comp_file} "
-        "relaxscript=MonomerDesign2019"
+        "relaxscript=MonomerDesign2019 "
+        "weights_file={wildcards.ef}"
 
 
 rule compute_design_distributions:
