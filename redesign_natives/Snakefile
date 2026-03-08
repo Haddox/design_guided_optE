@@ -1,8 +1,6 @@
 configfile: "config.yaml"
 
-import os
-
-STEMS = [f.replace(".pdb", "") for f in os.listdir(config["pdb_dir"]) if f.endswith(".pdb")]
+STEMS = config["stems"]
 EFS = config["energy_functions"]
 
 

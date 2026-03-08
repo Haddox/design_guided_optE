@@ -8,3 +8,25 @@ surface_aa_comp_file: scripts/total_hydrophobicity.comp
 energy_functions:
   - beta_nov16_cart
   - beta_jan25_cart
+
+stems:
+  - 1c5e_clean_0001
+  - 1h4a_clean_0001
+  - 1kq6_clean_0001
+  - 1rw1_clean_0001
+  - 1sfh_clean_0001
+  - 1u07_clean_0001
+  - 1xod_clean_0001
+  - 2bwf_clean_0001
+  - 2c2u_clean_0001
+  - 2fhz_clean_0001
+  - 2ic6_clean_0001
+  - 2nwd_clean_0001
+  - 2v1m_clean_0001
+  - 3dke_clean_0001
+  - 3ess_clean_0001
+  - 3hp4_clean_0001
+  - 1agy_clean_0001
+  - 2axw_clean_0001
+  - 2dko_clean_0001
+  - 3hyn_clean_0001
