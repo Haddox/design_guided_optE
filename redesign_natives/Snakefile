@@ -21,11 +21,14 @@ rule gen_ref:
         pdbs=expand("{pdb_dir}/{stem}.pdb", pdb_dir=config["pdb_dir"], stem=STEMS),
     output:
         "results/crystal_ref/crystal_ref.ref",
+    log:
+        "logs/gen_ref.log",
     shell:
-        "python {config[distdstr_script]} {input.pdbs} "
+        "python scripts/distdstr_0.3.py {input.pdbs} "
         "--output_dir results/crystal_ref "
         "--gen --ref {output} "
-        "--use_new_atom_typing"
+        "--use_new_atom_typing "
+        "&> {log}"
 
 
 rule relax:
@@ -91,13 +94,16 @@ rule compute_design_distributions:
         ref="results/crystal_ref/crystal_ref.ref",
     output:
         "results/design_distributions/{ef}/distrs_new_atom_typing.csv",
+    log:
+        "logs/compute_design_distributions_{ef}.log",
     shell:
-        "python {config[distdstr_script]} {input.designed_pdbs} "
+        "python scripts/distdstr_0.3.py {input.designed_pdbs} "
         "--ref {input.ref} "
         "--output_dir results/design_distributions/{wildcards.ef} "
         "--plot --verbose "
         "--use_new_atom_typing "
-        "--allow_missing_atom_pairs"
+        "--allow_missing_atom_pairs "
+        "&> {log}"
 
 
 rule compute_test_distributions:
@@ -109,10 +115,13 @@ rule compute_test_distributions:
         ref="results/crystal_ref/crystal_ref.ref",
     output:
         "results/test_distributions/{ef}/distrs_new_atom_typing.csv",
+    log:
+        "logs/compute_test_distributions_{ef}.log",
     shell:
-        "python {config[distdstr_script]} {input.relaxed_pdbs} "
+        "python scripts/distdstr_0.3.py {input.relaxed_pdbs} "
         "--ref {input.ref} "
         "--output_dir results/test_distributions/{wildcards.ef} "
         "--plot --verbose "
         "--use_new_atom_typing "
-        "--allow_missing_atom_pairs"
+        "--allow_missing_atom_pairs "
+        "&> {log}"
