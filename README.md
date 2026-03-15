@@ -7,3 +7,5 @@
 * `interface_prediction/`: files related to the interface-prediction benchmark
 * `monomer_ddg/`: files related to the monomer ddG benchmark
 * `interface_ddg/`: files related to the interface ddG benchmark
+* `lj_landscapes/`: code for computing LJ energy landscapes
+* `pred_rescue/`: cod for evaluating Rosetta's ability to predict the effects of rescue mutations from the DMS experiment
