@@ -7,7 +7,7 @@ EFS = config["energy_functions"]
 rule all:
     input:
         expand(
-            "results/test_distributions/{ef}/distrs_new_atom_typing.csv",
+            "results/relax_distributions/{ef}/distrs_new_atom_typing.csv",
             ef=EFS,
         ),
         expand(
@@ -106,7 +106,7 @@ rule compute_design_distributions:
         "&> {log}"
 
 
-rule compute_test_distributions:
+rule compute_relax_distributions:
     input:
         relaxed_pdbs=expand(
             "results/relax/{{ef}}/{stem}_0001.pdb",
@@ -114,13 +114,13 @@ rule compute_test_distributions:
         ),
         ref="results/crystal_ref/crystal_ref.ref",
     output:
-        "results/test_distributions/{ef}/distrs_new_atom_typing.csv",
+        "results/relax_distributions/{ef}/distrs_new_atom_typing.csv",
     log:
-        "logs/compute_test_distributions_{ef}.log",
+        "logs/compute_relax_distributions_{ef}.log",
     shell:
         "python scripts/distdstr_0.3.py {input.relaxed_pdbs} "
         "--ref {input.ref} "
-        "--output_dir results/test_distributions/{wildcards.ef} "
+        "--output_dir results/relax_distributions/{wildcards.ef} "
         "--plot --verbose "
         "--use_new_atom_typing "
         "--allow_missing_atom_pairs "
